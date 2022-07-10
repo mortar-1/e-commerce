@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+            <br/>
+
+            <h4>ITEMS</h4>
+            <br/>
+
+            <form th:action="@{/items}" method="GET">
+                <div class="form-row">
+                    <div class="form-group mr-2">
+                        <label for="type">Type</label>
+                        <select class="form-control" id="type" name="type">
+                            <option value="">All</option>
+                            <option value="product">Products</option>
+                            <option value="service">Services</option>
+                        </select>
+                    </div>                                      
+                    <div class="form-group mr-2">
+                        <label for="category">Category</label>
+                        <select class="form-control" id="category" name="category">
+                            <option>All</option>
+                            <div th:each="category : ${mainCategories}">
+                                <option class="optionGroup"  th:text="${category.name}" th:value="${category.id}"></option>
+                                <div th:each="subCategory1 : ${category.subCategories}">
+                                    <option class="optionChild1" th:text="${subCategory1.name}" th:value="${subCategory1.id}"></option>
+                                    <div th:each="subCategory2 : ${subCategory1.subCategories}">
+                                        <option class="optionChild2" th:text="${subCategory2.name}" th:value="${subCategory2.id}"></option>
+                                        <div th:each="subCategory3 : ${subCategory2.subCategories}">
+                                            <option class="optionChild3" th:text="${subCategory3.name}" th:value="${subCategory3.id}"></option>
+                                            <div th:each="subCategory4 : ${subCategory3.subCategories}">
+                                                <option class="optionChild4" th:text="${subCategory4.name}" th:value="${subCategory4.id}"></option>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hidden">Hidden</label>
+                        <select class="form-control" id="hidden" name="showHidden">
+                            <option value="all">All</option>
+                            <option value="true">Only hidden</option>
+                            <option value="false">No hidden</option>
+                        </select>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name" class="sr-only">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Product name" th:value="${name}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="productNumber" class="sr-only">Product number</label>
+                        <input type="number" class="form-control" name="productNumber" id="productNumber" placeholder="Product number" th:value="${productNumber}"/>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="manufacturer" class="sr-only">Manufacturer</label>
+                        <input type="text" class="form-control" name="manufacturer" id="manufacturer" placeholder="Manufacturer" th:value="${manufacturer}"/>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="wholesaler" class="sr-only">Wholesaler</label>
+                        <input type="text" class="form-control" name="wholesaler" id="wholesaler" placeholder="Wholesaler" th:value="${wholesaler}"/>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary mb-2">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th scope="col">Type</th>
+                        <th scope="col">Product Number</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Stock Value</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Wholesaler</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Hidden</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="item : ${items}">
+                        <td th:text="${item.itemType}"></td>
+                        <td><a th:text="${item.productNumber}" th:href="@{'/items/' + ${item.id} + '/edit'}">item name</a></td>
+                        <td th:text="${item.name}"></td>
+                        <td th:text="${item.amount + '' + item.unit}"></td>
+                        <td th:text="${item.price}"></td>
+                        <td th:if="${item.stock == null}"></td>
+                        <td th:if="${item.stock == null}"></td>
+                        <td th:unless="${item.stock == null}" th:text="${item.stock} % 1 == 0? ${#numbers.formatDecimal(item.stock, 0, 0)}: ${#numbers.formatDecimal(item.stock, 0, 2)}"></td>
+                        <td th:unless="${item.stock == null}" th:text="${#numbers.formatDecimal(item.stock * item.price, 0, 3)}"></td>
+                        <td th:text="${item.manufacturer}"></td>
+                        <td th:text="${item.wholesaler}"></td>
+                        <td th:text="${item.category.name}"></td>
+                        <td th:if="${item.isHidden}" style="color: gray">Yes</td>
+                        <td th:unless="${item.isHidden}" style="color: gray">No</td>
+                        <td> <button type="button" th:attr="onclick=|document.getElementById('delete' + ${item.id}).click()|">Delete</button> </td>
+                        <td th:unless="${item.isHidden}"><button type="button" th:attr="onclick=|document.getElementById('hide' + ${item.id}).click()|">Hide</button> </td>
+                        <td th:if="${item.isHidden}"><button type="button" th:attr="onclick=|document.getElementById('unhide' + ${item.id}).click()|">Unhide</button> </td>
+                        <td>
+                            <form th:action="@{'/items/' + ${item.id} + '/delete'}" method="POST">
+                                <input type='text' name="redirectTo" th:value="${'/items/?type=' + type + '&category=' + category + '&showHidden=' + showHidden + '&name=' + name + '&productNumber=' + productNumber +  '&manufacturer=' + manufacturer + '&wholesaler=' + wholesaler}" style="display: none"/>
+                                <input type="submit" style="display:none;" th:id="${'delete' + item.id}"/>
+                            </form>
+                        </td>
+                        <td th:unless="${item.isHidden}">
+                            <form th:action="@{'/items/' + ${item.id} + '/hide'}" method="POST">
+                                <input type='text' name="redirectTo" th:value="${'/items/?type=' + type + '&category=' + category + '&showHidden=' + showHidden + '&name=' + name + '&productNumber=' + productNumber +  '&manufacturer=' + manufacturer + '&wholesaler=' + wholesaler}" style="display: none"/>
+                                <input type="submit" style="display:none;" th:id="${'hide' + item.id}"/>
+                            </form>
+                        </td>
+                        <td th:if="${item.isHidden}">
+                            <form th:action="@{'/items/' + ${item.id} + '/unhide'}" method="POST">
+                                <input type='text' name="redirectTo" th:value="${'/items/?type=' + type + '&category=' + category + '&showHidden=' + showHidden + '&name=' + name + '&productNumber=' + productNumber +  '&manufacturer=' + manufacturer + '&wholesaler=' + wholesaler}" style="display: none"/>
+                                <input type="submit" style="display:none;" th:id="${'unhide' + item.id}"/>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <br/>
+
+            <div>
+
+                <a th:href="@{/items/new}"><h6>Add new item</h6></a>
+
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>
+
+<!--
+
+<div class="form-group mr-2">
+    <label for="category">Category</label>
+    <input class="form-control" list="category" name="category" id="categories" placeholder="All" th:value="${category}"/>
+    <datalist id="category">
+        <option th:each="ca : ${categories}" th:value="${ca.name}"/>
+    </datalist>
+</div>
+
+<div class="form-group mr-2">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" name="category">
+        <option>All</option>
+        <div th:each="category : ${mainCategories}">
+            <option class="optionGroup"  th:text="${category.name}" th:value="${category.id}"></option>
+            <div th:each="subCategory1 : ${category.subCategories}">
+                <option class="optionChild1" th:text="${subCategory1.name}" th:value="${subCategory1.id}"></option>
+                <div th:each="subCategory2 : ${subCategory1.subCategories}">
+                    <option class="optionChild2" th:text="${subCategory2.name}" th:value="${subCategory2.id}"></option>
+                    <div th:each="subCategory3 : ${subCategory2.subCategories}">
+                        <option class="optionChild3" th:text="${subCategory3.name}" th:value="${subCategory3.id}"></option>
+                        <div th:each="subCategory4 : ${subCategory3.subCategories}">
+                            <option class="optionChild4" th:text="${subCategory4.name}" th:value="${subCategory4.id}"></option>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </select>
+</div>
+
+-->
+

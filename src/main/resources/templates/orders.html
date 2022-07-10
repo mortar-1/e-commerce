@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+        <div th:replace="fragments/layout :: header"/>
+
+        <h1>ORDERS</h1>
+
+        <table>
+            <tr>
+                <th> Orderer </th>
+                <th></th>
+                <th> Sum</th>
+            </tr>
+        </table>
+
+        <div th:each="order : ${orders}">
+
+
+            <table>
+                <tr>
+                    <th th:text="${order.orderer}">  </th>
+                    <th></th>
+                    <th th:text="${order.sum}">  </th>
+                    <th></th>
+                    <th> <button type="button" th:attr="onclick=|document.getElementById('delete' + ${order.id}).click()|">DELETE</button> </th>
+                </tr>
+            </table>
+            <form th:action="@{'/orders/' + ${order.id} + '/delete'}" method="POST">
+                <input type="submit" style="display:none;" th:id="${'delete' + order.id}"/>
+            </form>
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>

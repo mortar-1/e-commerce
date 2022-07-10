@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+
+            <br/>
+            <h1>REGISTRATION FORM</h1>
+            <br/>
+            <form th:action="@{/accounts/new}" method="POST" th:object="${newAccount}">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <small th:if="${#fields.hasErrors('email')}" class="alert alert-error" style="color: red" th:errors="*{email}"> Email Error </small>
+                    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <small th:if="${#fields.hasErrors('password')}" class="alert alert-error" style="color: red"> invalid password </small>
+                    <small th:if="${#fields.hasErrors('confirmPassword')}" class="alert alert-error" style="color: red" th:errors="*{confirmPassword}"> Confirm Password Error </small>
+                    <input autocomplete="new-password" name="password" type="password" class="form-control" id="passwod" placeholder="At least: 6 characters in length, 1 uppercase character, 1 digit, 1 special character"/>
+                </div>
+                <div class="form-group">
+                    <input name="confirmPassword" type="password" class="form-control" id="confirm-password" placeholder="Confirm password"/>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <small th:if="${#fields.hasErrors('firstName')}" class="alert alert-error" style="color: red" th:errors="*{firstName}"> First Name Error </small>
+                    <input name="firstName" type="text" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <small th:if="${#fields.hasErrors('lastName')}" class="alert alert-error" style="color: red" th:errors="*{lastName}"> Last Name Error </small>
+                    <input name="lastName" type="text" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <small th:if="${#fields.hasErrors('address')}" class="alert alert-error" style="color: red" th:errors="*{address}"> Address Name Error </small>
+                    <input name="address" type="text" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="postalCode">Postal/Zip code</label>
+                    <small th:if="${#fields.hasErrors('postalCode')}" class="alert alert-error" style="color: red" th:errors="*{postalCode}"> Postal Code Error </small>
+                    <input name="postalCode" type="number" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <small th:if="${#fields.hasErrors('city')}" class="alert alert-error" style="color: red" th:errors="*{city}"> City Error </small>
+                    <input name="city" type="text" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <small th:if="${#fields.hasErrors('country')}" class="alert alert-error" style="color: red" th:errors="*{country}"> Country Error </small>
+                    <input name="country" type="text" class="form-control" id="firstName"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone number</label>
+                    <small th:if="${#fields.hasErrors('phoneNumber')}" class="alert alert-error" style="color: red" th:errors="*{phoneNumber}"> Phone Number Error </small>
+                    <input name="phoneNumber" type="number" class="form-control" id="firstName"></input>
+                </div>
+                <div class="form-check">
+                    <input name="privacyPolicyIsRead" type="checkbox" class="form-check-input" id="exampleCheck1"/>
+                    <label class="form-check-label" for="privacyPolicyIsRead">I have read and agree with the <a th:href="@{/privacy}">privacy policy</a></label>
+                    <small th:if="${#fields.hasErrors('privacyPolicyIsRead')}" class="alert alert-error" style="color: red" th:errors="*{privacyPolicyIsRead}"> Privacy Policy Error </small>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <br/>
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>

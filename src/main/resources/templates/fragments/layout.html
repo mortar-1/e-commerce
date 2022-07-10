@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <!--HEAD-->
+    <head th:fragment="head">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <title>eCommerce</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    </head>
+
+    <body>
+
+        <!--HEADER-->
+        <header th:fragment="header">
+            <nav class="navbar navbar-expand-md navbar-light bg-light">
+                <a class="navbar-brand" th:href="@{/shop}">Logo</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" th:href="@{/shop}">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-item nav-link" th:href="@{/cart}">Cart</a>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Manage
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" th:href="@{/items}">Manage Items</a>
+                                <a class="dropdown-item" th:href="@{/accounts}">Manage accounts</a>
+                                <a class="dropdown-item" th:href="@{/orders}">Manage orders</a>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="accountDropdown">
+                                <a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/login}">Login</a>
+                                <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/logout}">Logout</a>
+                                <a sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/account}">Manage account</a>
+                                <a sec:authorize="!isAuthenticated()" class="dropdown-item" th:href="@{/accounts/new}">New account</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav> 
+        </header>
+
+        <!--SCRIPT-->
+        <div th:fragment="jqueryPopperBootstrapScript">
+            <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        </div>
+
+        <div th:fragment="bindPriceDiscountPriceDiscountPercentageScript">
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#price").keyup(function () {
+                        var value = ((1 - ($("#discountPercentage").val() * 0.01)) * $(this).val()).toFixed(3);
+                        $("#discountPrice").val(value);
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#discountPrice").keyup(function () {
+                        var value = (100 - ($(this).val() / $("#price").val() * 100)).toFixed(1);
+                        $("#discountPercentage").val(value);
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#discountPercentage").keyup(function () {
+                        var value = ((1 - ($(this).val() * 0.01)) * $("#price").val()).toFixed(3);
+                        $("#discountPrice").val(value);
+                    });
+                });
+            </script>
+        </div>
+
+        <div th:fragment="discountDatesControlScript">
+            <script>
+                $(document).ready(function () {
+                    $("#discountStarts").change(function () {
+                        var minDate = $("#discountStarts").val();
+
+                        $('#discountEnds').attr('min', minDate);
+                    });
+                });
+            </script>
+        </div>
+
+        <div th:fragment="showFileNameScript">
+            <script>
+
+                var element = document.getElementById("fileName")
+
+                $(document).ready(function () {
+                    $("#image").change(function (file) {
+                        var fileName = file.target.files[0].name;
+
+                        element.innerHTML = fileName;
+                    });
+                });
+            </script>
+        </div>
+
+    </body>
+</html>

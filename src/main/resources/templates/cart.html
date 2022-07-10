@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <h1>SHOPPING CART</h1>
+
+        <div th:each="instance : ${items}">
+
+
+            <table>
+                <tr>
+                    <th> Item </th>
+                    <th> Price / unit </th>
+                    <th> item count </th>
+                </tr>
+                <tr>
+                    <th th:text="${instance.key.name}">  </th>
+                    <th th:text="${instance.key.price}">  </th>
+                    <th th:text="${instance.value}">  </th>
+                    <th> <button type="button" th:attr="onclick=|document.getElementById('remove' + ${instance.key.id}).click()|">DELETE</button>  </th>
+                </tr>
+            </table>
+            <form th:action="@{'/cart/items/' + ${instance.key.id} + '/remove'}" method="POST">
+                <input type="text" style="display: none" name="redirectTo" value="/cart"/>
+                <input type="submit" style="display:none;" th:id="${'remove' + instance.key.id}"/>
+            </form>
+
+        </div>
+
+        <br/>
+        
+        <div>
+            <form th:action="@{/cart/order/}" method="POST">
+                <input type="text" name="orderer" placeholder="Your name"/>
+                <input type="submit" style="display:none;" id="order"/>
+            </form>
+            
+            <br/>
+            
+            <button type="button" onclick="document.getElementById('order').click()">ORDER</button>
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>

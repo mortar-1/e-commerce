@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+
+            <div th:if="${param.itemUpdated}" class="alert alert-success"> 
+                Item info updated successfully
+            </div>
+
+
+            <form th:action="@{'/items/' + ${item.id} + '/edit'}" method="POST" th:object="${newEditItem}">
+                <div class="form-group">
+                    <label for="productNumber">Product Number</label>
+                    <small th:if="${#fields.hasErrors('productNumber')}" class="alert alert-error" style="color: red" th:errors="*{productNumber}"> product number error</small>
+                    <input name="productNumber" type="number" class="form-control" id="productNumber" th:value="${item.productNumber}"/>
+                </div>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <small th:if="${#fields.hasErrors('name')}" class="alert alert-error" style="color: red" th:errors="*{name}"> name error </small>
+                    <input name="name" type="text" class="form-control" id="name" th:value="${item.name}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="manufacturer">Manufacturer</label>
+                    <small th:if="${#fields.hasErrors('manufacturer')}" class="alert alert-error" style="color: red" th:errors="*{manufacturer}">  </small>
+                    <input name="manufacturer" type="text" class="form-control" id="manufacturer" th:value="${item.manufacturer}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="wholesaler">Wholesaler</label>
+                    <small th:if="${#fields.hasErrors('wholesaler')}" class="alert alert-error" style="color: red" th:errors="*{wholesaler}">  </small>
+                    <input name="wholesaler" type="text" class="form-control" id="wholesaler" th:value="${item.wholesaler}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <small th:if="${#fields.hasErrors('price')}" class="alert alert-error" style="color: red" th:errors="*{price}">  </small>
+                    <input name="price" type="number" step="0.001" class="form-control" id="price" th:value="${item.price}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="discountPrice">Discount Price</label>
+                    <small th:if="${#fields.hasErrors('discountPrice')}" class="alert alert-error" style="color: red" th:errors="*{discountPrice}">  </small>
+                    <input name="discountPrice" type="number" step="0.001" class="form-control" id="discountPrice" th:value="${item.discountPrice}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="discountPercentage">Discount %</label>
+                    <small th:if="${#fields.hasErrors('discountPercentage')}" class="alert alert-error" style="color: red" th:errors="*{discountPercentage}">  </small>
+                    <input name="discountPercentage" type="number" step="0.01" class="form-control" id="discountPercentage" th:value="${item.discountPercentage}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="discountStarts">Discount Starts</label>
+                    <small th:if="${#fields.hasErrors('discountStarts')}" class="alert alert-error" style="color: red" th:errors="*{discountStarts}"></small>
+                    <input name="discountStarts" type="date" class="form-control" id="discountStarts" th:value="${item.discountStarts}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="discountEnds">Discount Ends</label>
+                    <small th:if="${#fields.hasErrors('discountEnds')}" class="alert alert-error" style="color: red" th:errors="*{discountEnds}"></small>
+                    <input name="discountEnds" type="date" class="form-control" id="discountEnds" th:value="${item.discountEnds}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <small th:if="${#fields.hasErrors('stock')}" class="alert alert-error" style="color: red" th:errors="*{stock}"></small>
+                    <input name="stock" type="number" step="0.01" class="form-control" id="stock" th:value="${item.stock}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="expirationDate">Expiration Date</label>
+                    <small th:if="${#fields.hasErrors('expirationDate')}" class="alert alert-error" style="color: red" th:errors="*{expirationDate}"></small>
+                    <input name="expirationDate" type="date" class="form-control" id="expirationDate" th:value="${item.expirationDate}"></input>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <small th:if="${#fields.hasErrors('description')}" class="alert alert-error" style="color: red" th:errors="*{description}"></small>
+                    <textarea name="description" class="form-control" id="description" th:text="${item.description}"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="isHidden">Hidden</label>
+                    <input th:unless="${item.isHidden}" name="isHidden" type="checkbox" class="form-control" id="isHidden" value="true"></input>
+                    <input th:if="${item.isHidden}" name="isHidden" type="checkbox" class="form-control" id="isHidden" value="true" checked="checked"></input>
+                </div>
+                <input type="text" name="currentPassword" style="display: none;" value=""/>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+        
+        <div th:replace="fragments/layout :: bindPriceDiscountPriceDiscountPercentageScript"/>
+        
+        <div th:replace="fragments/layout :: discountDatesControlScript"/>
+        
+    </body>
+</html>

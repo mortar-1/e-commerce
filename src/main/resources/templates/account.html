@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+
+            <br/>
+            <h1 th:text="${account.firstName + ' ' + account.lastName}">YOUR ACCOUNT</h1>
+            <br/>
+
+            <div th:if="${param.updated}" class="alert alert-success"> 
+                account info updated successfully
+            </div>
+            <div th:if="${param.passwordUpdated}" class="alert alert-success"> 
+                password updated successfully
+            </div>
+            
+
+            <form th:action="@{'/accounts/' + ${account.id} + '/update'}" method="POST" th:object="${newUpdateAccount}">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <small th:if="${#fields.hasErrors('email')}" class="alert alert-error" style="color: red" th:errors="*{email}"> Email Error </small>
+                    <input name="email" type="text" class="form-control" id="email" th:value="${account.email}"/>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <small th:if="${#fields.hasErrors('firstName')}" class="alert alert-error" style="color: red" th:errors="*{firstName}"> First Name Error </small>
+                    <input name="firstName" type="text" class="form-control" id="firstName" th:value="${account.firstName}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <small th:if="${#fields.hasErrors('lastName')}" class="alert alert-error" style="color: red" th:errors="*{lastName}"> Last Name Error </small>
+                    <input name="lastName" type="text" class="form-control" id="lastName" th:value="${account.lastName}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <small th:if="${#fields.hasErrors('address')}" class="alert alert-error" style="color: red" th:errors="*{address}"> Address Name Error </small>
+                    <input name="address" type="text" class="form-control" id="address" th:value="${account.address}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="postalCode">Postal/Zip code</label>
+                    <small th:if="${#fields.hasErrors('postalCode')}" class="alert alert-error" style="color: red" th:errors="*{postalCode}"> Postal Code Error </small>
+                    <input name="postalCode" type="number" class="form-control" id="postalCode" th:value="${account.postalCode}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <small th:if="${#fields.hasErrors('city')}" class="alert alert-error" style="color: red" th:errors="*{city}"> City Error </small>
+                    <input name="city" type="text" class="form-control" id="city" th:value="${account.city}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <small th:if="${#fields.hasErrors('country')}" class="alert alert-error" style="color: red" th:errors="*{country}"> Country Error </small>
+                    <input name="country" type="text" class="form-control" id="country" th:value="${account.country}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone number</label>
+                    <small th:if="${#fields.hasErrors('phoneNumber')}" class="alert alert-error" style="color: red" th:errors="*{phoneNumber}"> Phone Number Error </small>
+                    <input name="phoneNumber" type="text" class="form-control" id="phoneNumber" th:value="${account.phoneNumber}"></input>
+                </div>     
+                <div class="form-group">
+                    <small th:if="${#fields.hasErrors('adminPassword')}" class="alert alert-error" style="color: red" th:errors="*{adminPassword}"> Admin Password Error </small>
+                    <input autocomplete="new-password" name="adminPassword" type="password" class="form-control" id="password" placeholder="admin password"/>
+                </div>
+                <input type="text" name="currentPassword" style="display: none;" value=""/>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+            
+            <br/>
+            <hr/>
+            <br/> 
+            
+            <form th:action="@{'/accounts/' + ${account.id} + '/delete'}" method="POST" th:object=${newPasswordCheck}>
+                <div class="form-group">
+                    <small th:if="${#fields.hasErrors('password')}" class="alert alert-error" style="color: red" th:errors="*{password}"> Admin Password Error </small>
+                    <input autocomplete="new-password" name="password" type="password" class="form-control" id="password" placeholder="admin password"/>
+                    <br/>
+                    <button type="submit" class="btn btn-primary">Delete Account</button>
+                </div>
+            </form>
+            <br/>
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>

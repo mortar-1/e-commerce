@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+        <div class="container">
+
+            <div class="card" style="width: 18rem;">
+                <a th:unless="${item.mainImageId == null}"  th:href="@{'/images/' + ${mainImageId} + '/view'}"><img class="card-img-top" th:src="@{'images/' + ${mainImageId}}"  alt="pruduct image"/></a>
+                <img th:if="${item.mainImageId == null}" class="card-img-top" th:src="@{/noImage.jpg}" alt="no pruduct image"/>
+                <div th:if="${#lists.size(item.images) > 1}" class="card-body">
+                    <div class="row justify-content-center text-center">
+                        <div class="col-4"  th:each="image : ${item.images}">
+                            <a th:href="@{'/images/' + ${image.id} + '/view'}"><img class="figure-img img-thumbnail" th:src="@{'/images/' + ${item.mainImage.Id}}" alt="pruduct image"/></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Product Description</h5>
+                    <p class="card-text" th:text="${item.description}">item description</p>
+                    <button th:unless="${itemCount == 0}" type="button" class="btn btn-link" onclick="document.getElementById('addToCart').click()" th:text="${'Add To Cart (' + itemCount + ')'}"></button>
+                    <button th:if="${itemCount == 0}" type="button" class="btn btn-link" onclick="document.getElementById('addToCart').click()">Add To Cart</button>
+                    <button th:unless="${itemCount == 0}" type="button" class="btn btn-link" onclick="document.getElementById('removeFromCart').click()">Remove From Cart</button>
+                </div>
+                <form th:action="@{'/cart/items/' + ${item.id}}" method="POST">
+                    <input type="text" style="display: none" name="redirectTo" th:value="${'/items/' + item.id}"/>
+                    <input type="submit" style="display: none" id="addToCart"/>
+                </form>
+                <form th:action="@{'/cart/items/' + ${item.id} + '/remove'}" method="POST">
+                    <input type="text" style="display: none" name="redirectTo" th:value="${'/items/' + item.id}"/>
+                    <input type="submit" style="display: none" id="removeFromCart"/>
+                </form>
+            </div>
+
+            <div sec:authorize="hasAuthority('ADMIN')" class="card" style="width: 18rem;">
+                <a th:href="@{'/items/' + ${item.id} + '/edit'}"><button class="btn btn-primary">Edit Item</button></a>
+                <button th:unless="${item.isHidden}" onclick="document.getElementById('hide').click()" class="btn btn-primary">Hide Item</button>
+                <button th:if="${item.isHidden}" onclick="document.getElementById('unhide').click()" class="btn btn-primary">Unhide Item</button>
+                <form th:action="@{'/items/' + ${item.id} + '/edit'}" method="POST">
+
+
+                </form>
+                <form th:unless="${item.isHidden}" th:action="@{'/items/' + ${item.id} + '/hide'}" method="POST">
+                    <input type="text" style="display: none" name="redirectTo" th:value="${'/items/' + item.id + '/hide'}"/>
+                    <input type="submit" style="display: none" id="hide"/>
+                </form>
+                <form th:if="${item.isHidden}" th:action="@{'/items/' + ${item.id} + '/unhide'}" method="POST">
+                    <input type="text" style="display: none" name="redirectTo" th:value="${'/items/' + item.id + '/unhide'}"/>
+                    <input type="submit" style="display: none" id="unhide"/>
+                </form>
+            </div>
+
+        </div>
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>

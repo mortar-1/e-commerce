@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+            <br/>
+
+            <div>
+                <h5>SHOP</h5>
+                
+
+                <div class="row justify-content-center text-center">
+                    <div class="col-4"  th:each="item : ${items}">
+
+                        <figure>
+                            <figure class="figure">
+                                <a th:unless="${#lists.size(item.images) == 0}" th:href="@{'/items/' + ${item.Id}}"><img class="figure-img img-thumbnail" th:src="@{'/images/' + ${item.mainImageId}}" alt="pruduct image"/></a>
+                                <a th:if="${#lists.size(item.images) == 0}" th:href="@{'/items/' + ${item.Id}}"><img class="figure-img img-thumbnail" th:src="@{/noImage.jpg}" alt="pruduct image"/></a>
+                                <figcaption class="figure-caption" th:text="${item.name}">item name</figcaption>
+                            </figure>
+                            <figcaption class="figure-caption" th:text="${item.price}">item price</figcaption>
+                            <button type="button" th:attr="onclick=|document.getElementById('addToCart' + ${item.id}).click()|">Add to Cart</button>
+                        </figure>
+
+                        <form th:action="@{'/cart/items/' + ${item.id}}" method="POST">
+                            <input type="text" style="display: none" name="redirectTo" value="/shop"/>
+                            <input type="submit" style="display:none;" th:id="${'addToCart' + item.id}"/>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <br/>
+
+            <div>
+                <button type="button" onclick="document.getElementById('goToCart').click()">Go to Cart</button>
+                <form th:action="@{/cart}" method="GET">
+                    <input type="submit" style="display:none;" id="goToCart"/>
+                </form>
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+    </body>
+</html>

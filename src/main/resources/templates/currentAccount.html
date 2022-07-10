@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.springframework.org/security/tags">
+
+    <head th:replace="fragments/layout :: head"></head>
+
+    <body>
+
+        <div th:replace="fragments/layout :: header"/>
+
+        <div class="container">
+
+            <br/>
+            <h1 th:text="${account.firstName + ' ' + account.lastName}">YOUR ACCOUNT</h1>
+            <br/>
+
+            <div th:if="${param.updated}" class="alert alert-success"> 
+                account info updated successfully
+            </div>
+            <div th:if="${param.passwordUpdated}" class="alert alert-success"> 
+                password updated successfully
+            </div>
+            
+
+            <form th:action="@{/account/update}" method="POST" th:object="${newUpdateAccount}">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <small th:if="${#fields.hasErrors('email')}" class="alert alert-error" style="color: red" th:errors="*{email}"> Email Error </small>
+                    <input name="email" type="text" class="form-control" id="email" th:value="${account.email}"/>
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <small th:if="${#fields.hasErrors('firstName')}" class="alert alert-error" style="color: red" th:errors="*{firstName}"> First Name Error </small>
+                    <input name="firstName" type="text" class="form-control" id="firstName" th:value="${account.firstName}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <small th:if="${#fields.hasErrors('lastName')}" class="alert alert-error" style="color: red" th:errors="*{lastName}"> Last Name Error </small>
+                    <input name="lastName" type="text" class="form-control" id="firstName" th:value="${account.lastName}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <small th:if="${#fields.hasErrors('address')}" class="alert alert-error" style="color: red" th:errors="*{address}"> Address Name Error </small>
+                    <input name="address" type="text" class="form-control" id="firstName" th:value="${account.address}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="postalCode">Postal/Zip code</label>
+                    <small th:if="${#fields.hasErrors('postalCode')}" class="alert alert-error" style="color: red" th:errors="*{postalCode}"> Postal Code Error </small>
+                    <input name="postalCode" type="number" class="form-control" id="firstName" th:value="${account.postalCode}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <small th:if="${#fields.hasErrors('city')}" class="alert alert-error" style="color: red" th:errors="*{city}"> City Error </small>
+                    <input name="city" type="text" class="form-control" id="firstName" th:value="${account.city}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <small th:if="${#fields.hasErrors('country')}" class="alert alert-error" style="color: red" th:errors="*{country}"> Country Error </small>
+                    <input name="country" type="text" class="form-control" id="firstName" th:value="${account.country}"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneNumber">Phone number</label>
+                    <small th:if="${#fields.hasErrors('phoneNumber')}" class="alert alert-error" style="color: red" th:errors="*{phoneNumber}"> Phone Number Error </small>
+                    <input name="phoneNumber" type="text" class="form-control" id="firstName" th:value="${account.phoneNumber}"></input>
+                </div>
+
+                <div class="form-group">
+                    <small th:if="${#fields.hasErrors('currentPassword')}" class="alert alert-error" style="color: red" th:errors="*{currentPassword}"> Password Error </small>
+                    <input autocomplete="new-password" name="currentPassword" type="password" class="form-control" id="password" placeholder="Enter current password"/>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+            <br/>
+
+            <br/>
+            <h3>Change password</h3>
+
+            <form th:action="@{/account/password}" method="POST" th:object="${newUpdatePassword}">
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <small th:if="${#fields.hasErrors('newPassword')}" class="alert alert-error" style="color: red"> invalid password </small>
+                    <input autocomplete="new-password" name="newPassword" type="password" class="form-control" id="newPassword" placeholder="At least: 6 characters in length, 1 uppercase character, 1 digit, 1 special character"/>
+                </div>
+                <div class="form-group">
+                    <small th:if="${#fields.hasErrors('confirmNewPassword')}" class="alert alert-error" style="color: red" th:errors="*{confirmNewPassword}"> Password Confirmation Error </small>
+                    <input autocomplete="new-password" name="confirmNewPassword" type="password" class="form-control" id="confirmNewPassword" placeholder="confirm new password"/>
+                </div>
+                <div class="form-group">
+                    <small th:if="${#fields.hasErrors('currentPassword')}" class="alert alert-error" style="color: red" th:errors="*{currentPassword}"> Current Password Error </small>
+                    <input autocomplete="new-password" name="currentPassword" type="password" class="form-control" id="password" placeholder="current password"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Change</button>
+            </form>
+
+        </div>
+
+        <div th:replace="fragments/layout :: jqueryPopperBootstrapScript"/>
+
+    </body>
+</html>
